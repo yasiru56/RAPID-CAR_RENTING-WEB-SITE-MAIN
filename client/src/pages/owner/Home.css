@@ -1,0 +1,406 @@
+/* 1. Basic Reset and Container */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.home-container {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0 auto;
+  background-color: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: linear-gradient(45deg, rgba(113, 181, 113, 0.1), rgba(113, 181, 113, 0.05));
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.hero-content {
+  max-width: 600px;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #2c5282, #71b571);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  line-height: 1.2;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  color: #4a5568;
+}
+
+/* WhatsApp Button */
+.whatsapp-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 12px 24px;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+}
+
+.whatsapp-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-button i {
+  font-size: 1.4rem;
+  margin-right: 10px;
+}
+
+/* Benefits Section */
+.benefits-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(113, 181, 113, 0.05), rgba(255, 255, 255, 0));
+}
+
+.benefits-section h1 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin-bottom: 3rem;
+}
+
+.benefit-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+.benefit-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-10px);
+}
+
+.benefit-card i {
+  font-size: 2.5rem;
+  color: #71b571;
+  margin-bottom: 1.5rem;
+}
+
+.benefit-card h3 {
+  color: #2d3748;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.benefit-card p {
+  color: #718096;
+  line-height: 1.6;
+}
+
+/* Next Level Section */
+.next-level-section {
+  padding: 4rem 2rem;
+  text-align: center;
+  background: linear-gradient(45deg, rgba(113, 181, 113, 0.05), rgba(44, 82, 130, 0.05));
+  border-radius: 30px;
+  margin: 2rem;
+}
+
+.next-level-section h2 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.next-level-section p {
+  color: #718096;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.contact-prompter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.contact-button {
+  background: #71b571;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.contact-button:hover {
+  background: #5a9e5a;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .benefit-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .next-level-section {
+    margin: 1rem;
+    padding: 2rem 1rem;
+  }
+
+  .contact-prompter {
+    flex-direction: column;
+  }
+}
+
+.hero-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.hero-content h1 span {
+  display: inline-block;
+  color: #057705; /* accent color */
+}
+
+.hero-content p {
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.hero-image {
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+/* 3. WhatsApp Button Styling */
+.whatsapp-container {
+  margin-left: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.whatsapp-button {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+}
+
+.whatsapp-button:hover {
+  background-color: #128C7E;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(37, 211, 102, 0.5);
+}
+
+.whatsapp-button i {
+  font-size: 1.4rem;
+  margin-right: 8px;
+}
+
+/* 4. Benefits Section */
+.benefits-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.benefits-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.benefit-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.benefit-card {
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  width: 250px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.benefit-card i {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #0069d9;
+}
+
+.benefit-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.benefit-card p {
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+/* 5. Next Level Section */
+.next-level-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.next-level-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.next-level-section p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+.premium-button {
+  display: inline-block;
+  background-color: #ffc107;
+  color: #333;
+  text-decoration: none;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.4rem;
+  transition: background-color 0.2s ease;
+}
+
+.premium-button:hover {
+  background-color: #e0a800;
+}
+
+.premium-image {
+  margin-top: 1rem;
+  max-width: 400px;
+  width: 100%;
+  height: auto;
+}
+
+/* 6. Contact Prompter in Next Level Section */
+.contact-prompter {
+  margin-top: 20px;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.contact-prompter i {
+  font-size: 2rem;
+  color: #25D366;
+  margin-right: 15px;
+}
+
+.contact-prompter span {
+  font-size: 1rem;
+  margin-right: 15px;
+}
+
+.contact-button {
+  background-color: #25D366;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.contact-button:hover {
+  background-color: #128C7E;
+}
+
+/* 7. Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero-section {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .whatsapp-container {
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .hero-content {
+    text-align: center;
+  }
+}

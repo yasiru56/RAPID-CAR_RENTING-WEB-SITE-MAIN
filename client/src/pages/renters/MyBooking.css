@@ -1,0 +1,136 @@
+.my-bookings {
+  padding: 2rem;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.my-bookings h2 {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.booking-section {
+  margin-bottom: 2.5rem;
+}
+
+.booking-section h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.3rem;
+  color: #333;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.5rem;
+}
+
+.booking-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-4px);
+}
+
+.booking-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 0.8rem;
+}
+
+.booking-info p {
+  margin: 5px 0;
+}
+
+.status {
+  font-weight: bold;
+  text-transform: capitalize;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.status.pending {
+  color: #e67e22;
+}
+
+.status.approved {
+  color: #27ae60;
+}
+
+.status.rejected {
+  color: #c0392b;
+}
+
+.cancel-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 7px 14px;
+  margin-top: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+.cancel-btn:hover {
+  background-color: #c0392b;
+}
+
+.booking-card.approved {
+  border-left: 5px solid #27ae60;
+}
+
+.booking-card.pending {
+  border-left: 5px solid #e67e22;
+}
+
+.booking-card.rejected {
+  border-left: 5px solid #c0392b;
+}
+.pay-btn {
+  margin-top: 10px;
+  background-color: #71b571;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pay-btn:hover {
+  background-color: #facc15;
+}
+.no-vehicles-section {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 40px auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.no-vehicles {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.empty-img {
+  max-width: 300px;
+  width: 100%;
+  margin-top: 10px;
+  opacity: 0.85;
+}

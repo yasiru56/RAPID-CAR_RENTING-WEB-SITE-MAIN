@@ -1,0 +1,9 @@
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: 0 0 12px 12px;
+  flex: 1;
+  overflow: hidden;
+}

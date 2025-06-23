@@ -1,0 +1,185 @@
+.renter-home {
+  font-family: "Segoe UI", sans-serif;
+  color: #222;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)),
+    url("../../../public/renter-images//hero-car.png") center/cover no-repeat;
+  padding: 80px 5%;
+  color: white;
+}
+
+.hero-content {
+  max-width: 600px;
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.trust-badges {
+  padding-top: 28px;
+}
+
+.hero-btn {
+  background-color: #71b571;
+  color: white;
+  margin-top: 20px;
+  padding: 12px 24px;
+  border: none;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.hero-image {
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.info-section {
+  padding: 60px 5%;
+  text-align: center;
+}
+
+.info-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.info-card {
+  flex: 1;
+  min-width: 240px;
+  max-width: 300px;
+}
+
+.info-card img {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.cta {
+  text-align: center;
+  background: #28a745;
+  color: white;
+  padding: 50px 20px;
+}
+
+.cta-btn {
+  margin-top: 20px;
+  background-color: white;
+  color: #28a745;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.cta-btn:hover {
+  background-color: #e6f0ff;
+}
+
+.why-choose-us,
+.top-cities,
+.testimonials {
+  padding: 60px 5%;
+  text-align: center;
+}
+
+.features,
+.city-list,
+.testimonial-cards {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.feature-box,
+.city-card,
+.testimonial {
+  max-width: 280px;
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.city-card img,
+.feature-box img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.quote {
+  margin-top: 20px;
+  font-style: italic;
+  color: #ffffff;
+}
+
+@media (max-width: 768px) {
+  .search-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.search-bar select,
+.search-bar button {
+  padding: 10px 14px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  min-width: 160px;
+  transition: all 0.2s ease;
+}
+
+.search-bar select:focus {
+  border-color: #facc15;
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+
+.search-bar button {
+  background-color: #71b571;
+  color: white;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.search-bar button:hover {
+  background-color: #facc15;
+}
+
+.trust-badges {
+  margin-top: 20px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: rgb(255, 255, 255);
+}

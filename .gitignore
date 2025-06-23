@@ -1,0 +1,21 @@
+# Node.js
+server/node_modules/
+client/node_modules/
+*.log
+npm-debug.log
+
+# Environment variables
+.env
+
+# React build files
+client/build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+.vscode/
+client/package-lock.json
