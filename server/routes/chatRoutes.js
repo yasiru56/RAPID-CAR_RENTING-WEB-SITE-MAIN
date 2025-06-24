@@ -2,10 +2,10 @@
 const express = require('express');
 const router = express.Router();
 const chatController = require('../controllers/chatController');
-const authMiddleware = require('../middleware/auth');
+const { authenticate } = require('../middlewares/auth');
 
 // Protected routes (require authentication)
-router.use(authMiddleware);
+router.use(authenticate);
 
 // Get all conversations for a user
 router.get('/user/:userId', chatController.getUserConversations);
