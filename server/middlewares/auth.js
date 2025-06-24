@@ -10,8 +10,9 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: 'Authentication required' });
     }
 
-    // Verify token
-    const decoded = jwt.verify(token, "#SMmaduranga123");
+  // Verify token
+  const secret = process.env.JWT_SECRET || 'defaultsecret';
+  const decoded = jwt.verify(token, secret);
     
     // Attach user to request
     req.user = decoded;

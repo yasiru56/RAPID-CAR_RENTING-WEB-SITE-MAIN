@@ -18,10 +18,13 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5001;
 
+// Determine client origin for CORS
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+
 // Initialize Socket.io
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: CLIENT_ORIGIN,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }
@@ -29,7 +32,7 @@ const io = new Server(server, {
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:3000', // or use '*' for development
+  origin: CLIENT_ORIGIN,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -38,7 +41,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI)
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
+mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
