@@ -9,7 +9,7 @@ dotenv.config();
 
 
 const generateToken = (id, role) => {  // Add role parameter
-    const secret = "#SMmaduranga123";
+    const secret = process.env.JWT_SECRET || 'defaultsecret';
     return jwt.sign({ id, role }, secret, {  // Include role in payload
         expiresIn: "30d",
     });
@@ -496,7 +496,8 @@ exports.protect = async (req, res, next) => {
         }
         
         // Verify token
-        const decoded = jwt.verify(token, "#SMmaduranga123");
+        const secret = process.env.JWT_SECRET || 'defaultsecret';
+        const decoded = jwt.verify(token, secret);
         
         // Find user and include role
         const user = await User.findById(decoded.id);
