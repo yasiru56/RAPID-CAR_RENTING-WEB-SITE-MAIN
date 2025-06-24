@@ -1,96 +1,87 @@
 const express = require("express");
-const http = require('http');
-const { Server } = require('socket.io');
+const http = require("http");
+const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const authRoutes = require('./routes/auth');
-const path = require('path');
-const multer = require('multer');
-const bodyParser = require('body-parser');
+const authRoutes = require("./routes/auth");
+const path = require("path");
+const bodyParser = require("body-parser");
 
-// Load environment variables
-dotenv.config();
+// Load environment variables - fix path to .env file
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-// Initialize Express app
+// App setup
 const app = express();
-// Create HTTP server using Express app
 const server = http.createServer(app);
 const PORT = process.env.PORT || 5001;
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:3000";
 
-// Determine client origin for CORS
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:3000';
+// ======= MongoDB Connection =======
+const MONGODB_URI = process.env.MONGODB_URI;
 
-// Initialize Socket.io
-const io = new Server(server, {
-  cors: {
+// Add debug logging to check if the MongoDB URI is loaded correctly
+console.log("MongoDB URI loaded:", MONGODB_URI ? "Yes" : "No");
+
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() => console.log("✅ MongoDB connected successfully"))
+  .catch((err) =>
+    console.error("❌ MongoDB connection error:", err.message || err)
+  );
+
+// ======= Middleware =======
+app.use(
+  cors({
     origin: CLIENT_ORIGIN,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  }
-});
-
-// Middleware
-app.use(cors({
-  origin: CLIENT_ORIGIN,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 app.use(express.json());
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// MongoDB Connection
-const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
-mongoose.connect(MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+// ======= Routes =======
+app.use("/api/vehicles", require("./routes/vehicleRoutes"));
+app.use("/api/bookings", require("./routes/BookingRoutes"));
+app.use("/api/notifications", require("./routes/BookingRoutes"));
+app.use("/api/wishlist", require("./routes/WishlistRoutes"));
+app.use("/api/auth", authRoutes);
 
-// API Routes
-const vehicleRoutes = require("./routes/vehicleRoutes");
-app.use("/api/vehicles", vehicleRoutes);
-
-const bookingRoutes = require("./routes/BookingRoutes");
-app.use("/api/bookings", bookingRoutes);
-
-const notificationRoutes = require("./routes/BookingRoutes");
-app.use("/api/notifications", notificationRoutes);
-
-const wishlistRoutes = require("./routes/WishlistRoutes");
-app.use("/api/wishlist", wishlistRoutes);
-
-app.use('/api/auth', authRoutes);
-
-// Static files
+// ======= Static Files =======
 app.use("/uploads", express.static("uploads"));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Simple test route
+// ======= Root Test =======
 app.get("/", (req, res) => {
   res.send("🚀 API is running...");
 });
 
-// ==================== SOCKET.IO CHAT SYSTEM ====================
+// ======= Socket.IO Chat =======
+const Vehicle = require("./models/Vehicle");
+const Booking = require("./models/Booking");
+const ConversationAnalyzer = require("./services/ConversationAnalyzer");
 
-// Load required models
-const Vehicle = require('./models/Vehicle');
-const Booking = require('./models/Booking');
-const ConversationAnalyzer = require('./services/ConversationAnalyzer');
+const io = new Server(server, {
+  cors: {
+    origin: CLIENT_ORIGIN,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  }
+});
 
-// Initialize conversation analyzer
 const conversationAnalyzer = new ConversationAnalyzer();
-
-// Track active conversations
 const activeConversations = new Map();
 
-io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
-  
-  // Join a conversation room
-  socket.on('join_conversation', ({ conversationId, userId, userType }) => {
+io.on("connection", (socket) => {
+  console.log("🟢 New client connected:", socket.id);
+
+  socket.on("join_conversation", ({ conversationId, userId, userType }) => {
     socket.join(conversationId);
-    
-    // Initialize conversation tracking if needed
+
     if (!activeConversations.has(conversationId)) {
       activeConversations.set(conversationId, {
         participants: {},
@@ -98,105 +89,81 @@ io.on('connection', (socket) => {
         vehicleId: null
       });
     }
-    
-    // Add participant info
+
     const conversation = activeConversations.get(conversationId);
     conversation.participants[socket.id] = { userId, userType };
-    
+
     console.log(`${userType} joined conversation: ${conversationId}`);
   });
-  
-  // Handle new messages
-  socket.on('send_message', async (messageData) => {
+
+  socket.on("send_message", async (messageData) => {
     const { conversationId, message, sender, vehicleId } = messageData;
-    
-    // Store message
     const conversation = activeConversations.get(conversationId);
     if (conversation) {
-      // Add vehicle ID if first message
       if (!conversation.vehicleId && vehicleId) {
         conversation.vehicleId = vehicleId;
       }
-      
-      // Add message to conversation history
+
       const newMessage = { ...message, sender, timestamp: new Date() };
       conversation.messages.push(newMessage);
-      
-      // Broadcast message to conversation room
-      io.to(conversationId).emit('receive_message', newMessage);
-      
-      // Analyze conversation after new message
+
+      io.to(conversationId).emit("receive_message", newMessage);
+
       if (conversation.messages.length >= 3) {
-        const result = await conversationAnalyzer.analyzeConversation(conversation.messages);
-        
-        if (result.intent === 'booking_intent') {
-          // Fetch vehicle details
+        const result = await conversationAnalyzer.analyzeConversation(
+          conversation.messages
+        );
+
+        if (result.intent === "booking_intent") {
           const vehicleDetails = await getVehicleDetails(conversation.vehicleId);
-          
-          // Generate booking suggestion
           const bookingSuggestion = {
-            type: 'booking_suggestion',
+            type: "booking_suggestion",
             vehicleDetails,
             suggestedDates: result.suggestedDates,
             message: "I notice you're interested in booking this vehicle. Would you like to proceed?"
           };
-          
-          // Send AI suggestion to the conversation
-          io.to(conversationId).emit('ai_suggestion', bookingSuggestion);
+          io.to(conversationId).emit("ai_suggestion", bookingSuggestion);
         }
       }
     }
   });
-  
-  // Handle booking initiation
-  socket.on('initiate_booking', async ({ conversationId, bookingDetails }) => {
+
+  socket.on("initiate_booking", async ({ conversationId, bookingDetails }) => {
     try {
-      // Process booking using your existing Booking model
       const bookingId = await createBooking(bookingDetails);
-      
-      // Notify all participants
-      io.to(conversationId).emit('booking_created', {
+      io.to(conversationId).emit("booking_created", {
         bookingId,
         details: bookingDetails,
         message: "Booking has been initiated successfully!"
       });
     } catch (error) {
-      console.error("Booking creation failed:", error);
-      socket.emit('booking_error', { 
+      console.error("❌ Booking creation failed:", error);
+      socket.emit("booking_error", {
         message: "Failed to create booking. Please try again.",
         error: error.message
       });
     }
   });
-  
-  // Handle disconnection
-  socket.on('disconnect', () => {
-    // Clean up participant data
+
+  socket.on("disconnect", () => {
     for (const [conversationId, data] of activeConversations.entries()) {
       if (data.participants[socket.id]) {
         delete data.participants[socket.id];
-        
-        // Remove conversation if empty
         if (Object.keys(data.participants).length === 0) {
           activeConversations.delete(conversationId);
         }
       }
     }
-    
-    console.log('Client disconnected:', socket.id);
+    console.log("🔴 Client disconnected:", socket.id);
   });
 });
 
-// Helper function to get vehicle details from your database
+// ======= Helper Functions =======
 async function getVehicleDetails(vehicleId) {
   try {
-    const vehicle = await Vehicle.findById(vehicleId)
-      .populate('owner', 'firstName lastName email');
-    
-    if (!vehicle) {
-      throw new Error('Vehicle not found');
-    }
-    
+    const vehicle = await Vehicle.findById(vehicleId).populate("owner", "firstName lastName email");
+    if (!vehicle) throw new Error("Vehicle not found");
+
     return {
       id: vehicle._id,
       name: `${vehicle.brand} ${vehicle.name}`,
@@ -204,41 +171,34 @@ async function getVehicleDetails(vehicleId) {
       location: vehicle.location,
       type: vehicle.type,
       thumbnail: vehicle.thumbnail || vehicle.images[0],
-      owner: vehicle.owner ? `${vehicle.owner.firstName} ${vehicle.owner.lastName}` : 'Unknown'
+      owner: vehicle.owner ? `${vehicle.owner.firstName} ${vehicle.owner.lastName}` : "Unknown"
     };
   } catch (error) {
-    console.error('Error fetching vehicle details:', error);
+    console.error("Error fetching vehicle details:", error);
     return null;
   }
 }
 
-// Helper function to create a booking in your database
 async function createBooking(bookingDetails) {
   try {
     const { vehicleId, userId, dates } = bookingDetails;
-    
     const newBooking = new Booking({
       vehicleId,
       renterId: userId,
       startDate: dates.startDate,
       endDate: dates.endDate,
-      status: 'pending',
-      createdVia: 'ai_chat'
+      status: "pending",
+      createdVia: "ai_chat"
     });
-    
     const savedBooking = await newBooking.save();
-    
-    // Send notification or update other related models as needed
-    // ...
-    
     return savedBooking._id;
   } catch (error) {
-    console.error('Error creating booking:', error);
+    console.error("Error creating booking:", error);
     throw error;
   }
 }
 
-// Start server (using the http server instead of Express app directly)
+// ======= Start Server =======
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
