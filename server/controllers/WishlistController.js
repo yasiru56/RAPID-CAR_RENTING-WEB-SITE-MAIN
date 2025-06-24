@@ -1,4 +1,4 @@
-const Wishlist = require("../models/wishlist");
+const Wishlist = require("../models/Wishlist");
 const Vehicle = require("../models/Vehicle");
 
 // GET all saved vehicles for a renter
